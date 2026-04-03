@@ -27,7 +27,7 @@ docker --version
 ---
 
 # 🐳 Dockerfile Explanation
-
+```bash
 FROM ubuntu:20.04
 # Use Ubuntu 20.04 as base image
 
@@ -45,6 +45,8 @@ EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
 # Run Nginx in foreground
+```
+
 
 ---
 
