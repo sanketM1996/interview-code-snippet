@@ -51,40 +51,41 @@ CMD ["nginx", "-g", "daemon off;"]
 ---
 
 # 🔨 Build Docker Image
-
+```bash
 docker build -t nginx-ubuntu .
-
+```
 ---
 
 # ▶️ Run Container
-
+```bash
 docker run -d -p 8080:80 --name nginx-container nginx-ubuntu
+```
 
 ---
 
 # 🌐 Access Application
-
+```bash
 Open browser:
 http://localhost:8080
-
+```
 ---
 
 # 🛑 Stop Container
-
+```bash
 docker stop nginx-container
-
+```
 ---
 
 # ❌ Remove Container
-
+```bash
 docker rm nginx-container
-
+```
 ---
 
 # 🧹 Remove Image
-
+```bash
 docker rmi nginx-ubuntu
-
+```
 ---
 
 # 📌 Notes
@@ -119,7 +120,7 @@ jenkins ALL=(ALL) NOPASSWD: ALL
 sudo usermod -aG root jenkins
 
 ---
-
+```bash
 # 📄 Jenkinsfile (Pipeline Script)
 
 pipeline {
@@ -157,11 +158,11 @@ pipeline {
 
     }
 }
-
+```
 ---
 
 # ❗ Fixes Applied
-
+```bash
 # 1. Removed incorrect sudo with echo redirection
 #    ❌ sudo echo "text" > file
 #    ✅ echo "text" > file && sudo mv file ...
@@ -169,39 +170,40 @@ pipeline {
 # 2. Used multi-line shell (''' ''') for better readability
 
 # 3. Fixed stage naming conventions (clean & readable)
-
+```
 ---
 
 # ▶️ How to Run
-
+```bash
 1. Create a Jenkins Pipeline job
 2. Add this Jenkinsfile
 3. Run Build
-
+```
 ---
 
 # 🌐 Verify Output
-
+```bash
 Open browser:
 http://<your-server-ip>
-
+```
 You should see:
 "Welcome to Young Minds. Keep Learning!! Keep Growing!!"
 
 ---
 
 # 🛑 Optional Improvements
-
+```bash
 # Restart instead of stop/start
 sudo systemctl restart nginx
 
 # Enable Nginx on boot
 sudo systemctl enable nginx
-
+```
 ---
 
 # ✅ Output
-
+```bash
 - Nginx installed automatically
 - Custom HTML deployed
 - Service managed via pipeline 🚀
+```
