@@ -1,0 +1,103 @@
+---
+- hosts: webservers
+  become: true
+  tasks:
+  - name: Installation of packages on Redhat family
+    when: ansible_os_family = "Redhat"
+    yum: path={{item}} state=present
+    with_items:
+    - vim
+    - zip
+    - curl
+    - nginx
+
+  - name: Installation of packages on Debain family
+    when: ansible_os_family = "Debain"
+    apt: path={{item}} state=present
+    with_items:
+    - vim
+    - zip
+    - curl
+    - nginx
+   
+
+  ---
+  # 🚀 Ansible Playbook: Install Packages Based on OS Family
+
+This playbook installs common packages (vim, zip, curl, nginx)
+based on the target system's OS family (RedHat or Debian).
+
+---
+
+# 📁 Playbook File: install-packages.yml
+
+---
+- hosts: webservers
+  become: true
+
+  tasks:
+
+    - name: Install packages on RedHat family
+      when: ansible_os_family == "RedHat"
+      yum:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - vim
+        - zip
+        - curl
+        - nginx
+
+    - name: Install packages on Debian family
+      when: ansible_os_family == "Debian"
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      loop:
+        - vim
+        - zip
+        - curl
+        - nginx
+
+---
+
+# ❗ Fixes Applied
+
+# 1. Corrected condition operator:
+#    ❌ ansible_os_family = "Redhat"
+#    ✅ ansible_os_family == "RedHat"
+
+# 2. Fixed spelling:
+#    ❌ Debain
+#    ✅ Debian
+
+# 3. Correct module parameter:
+#    ❌ path=
+#    ✅ name=
+
+# 4. Replaced deprecated with_items:
+#    ✅ loop is modern approach
+
+# 5. Added update_cache for apt
+
+---
+
+# ▶️ Run Playbook
+
+ansible-playbook -i inventory install-packages.yml
+
+---
+
+# 📌 Inventory Example
+
+[webservers]
+192.168.1.10
+192.168.1.11
+
+---
+
+# ✅ Output
+
+- Installs packages on both RedHat & Debian systems automatically
+- Uses correct package manager (yum / apt)
