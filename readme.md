@@ -111,13 +111,18 @@ and manages the Nginx service.
 # ⚙️ Prerequisites
 
 # Add Jenkins user to sudoers file
+```bash
 sudo visudo
-
+```
 # Add below line:
+```bash
 jenkins ALL=(ALL) NOPASSWD: ALL
+```
 
 # Add Jenkins user to root group (optional)
+```bash
 sudo usermod -aG root jenkins
+```
 
 ---
 ```bash
