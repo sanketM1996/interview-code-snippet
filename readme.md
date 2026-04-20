@@ -20,10 +20,10 @@ docker --version
 
 # 📁 Project Structure
 
-.
+.```bash
 ├── Dockerfile
 └── index.html   # (optional custom file)
-
+```
 ---
 
 # 🐳 Dockerfile Explanation
