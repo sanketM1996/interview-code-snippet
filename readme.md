@@ -19,8 +19,8 @@ docker --version
 ---
 
 # 📁 Project Structure
-
-.```bash
+```bash
+.
 ├── Dockerfile
 └── index.html   # (optional custom file)
 ```
