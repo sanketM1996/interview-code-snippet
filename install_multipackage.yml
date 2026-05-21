@@ -1,25 +1,23 @@
 ---
-- hosts: webservers
-  become: true
-
-  vars:
-    packages:
-      - vim
-      - zip
-      - curl
-      - nginx
+- name: Install Nginx
+  hosts: webservers
+  become: yes
 
   tasks:
-
-    - name: Install packages on RedHat
-      when: ansible_os_family == "RedHat"
-      yum:
-        name: "{{ packages }}"
-        state: present
-
-    - name: Install packages on Debian
-      when: ansible_os_family == "Debian"
+    - name: Install nginx package
       apt:
-        name: "{{ packages }}"
+        name: nginx
         state: present
-        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Install nginx package on RedHat
+      yum:
+        name: nginx
+        state: present
+      when: ansible_os_family == "RedHat"
+
+    - name: Start nginx service
+      service:
+        name: nginx
+        state: started
+        enabled: yes
