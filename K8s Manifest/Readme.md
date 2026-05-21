@@ -1,62 +1,56 @@
-# 📁 Deployment 
-```bash
-  readinessProbe:
-            httpGet:
-              path: /
-              port: 80
+# Kubernetes Manifest Notes
 
-          livenessProbe:
-            httpGet:
-              path: /
-              port: 80
-1. Readiness Probe
+## Deployment
+
+### Readiness Probe
+
+```yaml
 readinessProbe:
   httpGet:
     path: /
     port: 80
-Meaning
+```
+
+**Meaning**
 
 Kubernetes sends an HTTP request to:
 
-http://<pod-ip>:80/
+`http://<pod-ip>:80/`
 
-If it gets a successful response (200–399), the pod is marked:
+If it receives a successful response (`200–399`), the pod is marked as **READY** and traffic is sent to the pod through the Service.
 
-READY
+**If the readiness probe fails:**
 
-Then traffic is sent to this pod through Service.
+- Kubernetes does not kill the container
+- The pod is removed from Service endpoints
+- Kubernetes stops sending traffic to it
 
-If Readiness Probe Fails
+**Common use cases:**
 
-Kubernetes:
+- App is still starting
+- Database connection is not ready
+- App is warming up
 
-Does NOT kill the container
-Removes pod from Service endpoints
-Stops sending traffic to it
+### Liveness Probe
 
-This is useful when:
-
-App is still starting
-Database connection not ready
-App warming up
-2. Liveness Probe
+```yaml
 livenessProbe:
   httpGet:
     path: /
     port: 80
-Meaning
-
-Kubernetes checks whether the application is still alive.
-
-It sends:
-
-http://<pod-ip>:80/
-
-If the probe keeps failing:
-
-Kubernetes assumes app is hung/crashed
-Automatically restarts the container
 ```
+
+**Meaning**
+
+Kubernetes checks whether the application is still alive by sending a request to:
+
+`http://<pod-ip>:80/`
+
+**If the liveness probe keeps failing:**
+
+- Kubernetes assumes the app is hung or crashed
+- Kubernetes automatically restarts the container
+
 ---
 
 ## Rolling Update Strategy
@@ -68,29 +62,30 @@ strategy:
     maxUnavailable: 1
 ```
 
-* **RollingUpdate** → replaces Pods gradually without downtime
-* **maxUnavailable: 1** → ensures at most one Pod is down during rollout
+- **RollingUpdate**: replaces pods gradually without downtime
+- **maxUnavailable: 1**: ensures at most one pod is unavailable during rollout
 
-**Result:** Users experience **zero downtime** while updates roll out.
+**Result:** Users experience **zero downtime** while updates are deployed.
 
 ---
-# 📁 configmap
+
+## ConfigMap
+
 **Manifest:** `nginx.yml`
 
 Under the container section, add:
 
 ```yaml
-    volumeMounts:
+volumeMounts:
   - name: nginx-html
     mountPath: /usr/share/nginx/html
 
-    volumes:
+volumes:
   - name: nginx-html
     configMap:
       name: nginx-config
 ```
 
-> This tells Kubernetes to load all key-value pairs from the ConfigMap as environment variables inside the container.
-> 🔹 Even though the defaults are already set in the app, we explicitly define them in the ConfigMap.
-> This demonstrates *Configuration as Code* — making all runtime configuration visible and manageable via Kubernetes manifests.
----
+> This tells Kubernetes to mount the ConfigMap data into the pod.
+> 
+> Even though default values may already exist in the application, defining them in a ConfigMap makes configuration visible and manageable as code.
